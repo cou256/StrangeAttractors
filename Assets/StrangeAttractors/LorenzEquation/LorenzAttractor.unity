@@ -138,7 +138,7 @@ MonoBehaviour:
   p: 10
   r: 28
   b: 2.6666667
-  numberOfDraw: 200000
+  numberOfDraw: 100000
   initialIterate: 0
   speed: 0.1
   particleScale: 0.1
@@ -264,7 +264,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
+  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
