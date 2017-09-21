@@ -1,0 +1,49 @@
+﻿#pragma kernel Calculate
+#include "UnityCG.cginc"
+#include "../Cginc/Transform.cginc"
+
+struct TransformStruct {
+	float3 translate;
+	float3 rotation;
+	float3 scale;
+	float sumTime;
+	float speed;
+};
+
+RWStructuredBuffer<TransformStruct> _TransformBuff;
+float _A, _B, _C;
+float _DeltaTime;
+
+float dx(float t, float3 v) {
+	return -(v.y + v.z);
+}
+float dy(float t, float3 v) {
+	return v.x + _A * v.y;
+}
+float dz(float t, float3 v) {
+	return _B + v.z * (v.x - _C);
+}
+float3 f(float dt, float t, float3 v) {
+	float3 k;
+	k.x = dx(t, v);
+	k.y = dy(t, v);
+	k.z = dz(t, v);
+	k *= dt;
+	return k;
+}
+float3 RungeKutta(float dt, float t, float3 iv) {
+	float t0 = t + dt;
+	float t1 = t0 * 0.5;
+	float3 k0 = f(dt, t, iv);
+	float3 k1 = f(dt, t1, iv + k0 * 0.5);
+	float3 k2 = f(dt, t1, iv + k1 * 0.5);
+	float3 k3 = f(dt, t0, iv + k2);
+	return (k0 + k1 * 2.0 + k2 * 2.0 + k3) / 6.0;
+}
+[numthreads(8, 8, 1)]
+void Calculate(uint3 id : SV_DispatchThreadID) {
+	TransformStruct tb = _TransformBuff[id.x];
+	float dt = _DeltaTime * tb.speed;
+	_TransformBuff[id.x].translate += RungeKutta(dt, tb.sumTime, tb.translate);
+	_TransformBuff[id.x].sumTime += dt;
+}
