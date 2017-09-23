@@ -1,6 +1,6 @@
 # StrangeAttractors
 ルンゲ＝クッタ法の勉強ついでに様々なストレンジアトラクタを実装してみた。
-
+![](https://raw.githubusercontent.com/cou256/StrangeAttractors/images/image00.gif)
 
 参考
 
